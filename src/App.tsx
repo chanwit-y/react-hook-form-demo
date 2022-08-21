@@ -1,8 +1,11 @@
+import { Box } from "@mui/material";
+import { Example } from "./Container/Example";
 
 function App() {
   return (
-    <div >
-    </div>
+    <Box m={4}>
+      <Example />
+    </Box>
   );
 }
 
