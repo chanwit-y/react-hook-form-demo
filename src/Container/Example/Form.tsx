@@ -7,9 +7,10 @@ import {
   Radio,
   RadioGroup,
   TextField,
+  Typography,
 } from "@mui/material";
 import { useEffect } from "react";
-import { Controller, useFormContext } from "react-hook-form";
+import { Controller, useFormContext, useFieldArray } from "react-hook-form";
 
 export const Form = () => {
   const {
@@ -19,6 +20,8 @@ export const Form = () => {
     trigger,
     formState: { errors },
   } = useFormContext();
+
+  const { fields, append } = useFieldArray({ control: control, name: "list" });
 
   useEffect(() => {
     trigger();
@@ -96,15 +99,70 @@ export const Form = () => {
           render={({ field, fieldState: { error } }) => (
             <TextField
               fullWidth
-	      multiline
+              multiline
               {...field}
               label="address"
-	      minRows={4}
+              minRows={4}
               error={!!error}
               helperText={error?.message}
             />
           )}
         />
+      </Grid>
+      <Grid item md={6}>
+        <Controller
+          name="billingAddress"
+          control={control}
+          defaultValue={""}
+          render={({ field, fieldState: { error } }) => (
+            <TextField
+              fullWidth
+              multiline
+              {...field}
+              label="Billing Address"
+              minRows={4}
+              error={!!error}
+              helperText={error?.message}
+            />
+          )}
+        />
+      </Grid>
+      <Grid container md={12} display="flex" alignItems="center">
+        <Grid item md={1}>
+          <Button
+            onClick={() => {
+              append({ name: "" });
+              trigger();
+            }}
+          >
+            Add
+          </Button>
+        </Grid>
+        <Grid item md={1}>
+          <Typography>
+            {errors && errors["list"] && errors["list"].message?.toString()}
+          </Typography>
+        </Grid>
+      </Grid>
+      <Grid item md={12}>
+        {fields.map((f, i) => (
+          <Grid item md={6}>
+            <Controller
+              name={`list.${i}.name`}
+              control={control}
+              defaultValue={""}
+              render={({ field, fieldState: { error } }) => (
+                <TextField
+                  fullWidth
+                  label="name"
+                  {...field}
+                  error={!!error}
+                  helperText={error?.message}
+                />
+              )}
+            />
+          </Grid>
+        ))}
       </Grid>
       <Grid item md={12}>
         {JSON.stringify(errors, undefined, 2)}
