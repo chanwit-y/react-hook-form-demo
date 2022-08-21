@@ -18,14 +18,23 @@ export const Form = () => {
     handleSubmit,
     reset,
     trigger,
+    watch,
+    setValue,
     formState: { errors },
   } = useFormContext();
 
-  const { fields, append } = useFieldArray({ control: control, name: "list" });
+  const { fields, append, remove } = useFieldArray({
+    control: control,
+    name: "list",
+  });
 
   useEffect(() => {
     trigger();
   }, []);
+
+  useEffect(() => {
+    console.log(watch("list"));
+  }, [watch("list")]);
 
   return (
     <Grid container spacing={2}>
@@ -176,7 +185,15 @@ export const Form = () => {
         >
           submit
         </Button>
-        <Button onClick={() => reset()}>reset</Button>
+        <Button
+          onClick={() => {
+            reset();
+            setValue("list", []);
+            //     fields.map((_, i) => remove(i));
+          }}
+        >
+          reset
+        </Button>
       </Grid>
     </Grid>
   );
