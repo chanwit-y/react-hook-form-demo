@@ -9,7 +9,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import { Controller, useFormContext, useFieldArray } from "react-hook-form";
 
 export const Form = () => {
@@ -155,22 +155,27 @@ export const Form = () => {
       </Grid>
       <Grid item md={12}>
         {fields.map((f, i) => (
-          <Grid item md={6}>
-            <Controller
-              name={`list.${i}.name`}
-              control={control}
-              defaultValue={""}
-              render={({ field, fieldState: { error } }) => (
-                <TextField
-                  fullWidth
-                  label="name"
-                  {...field}
-                  error={!!error}
-                  helperText={error?.message}
-                />
-              )}
-            />
-          </Grid>
+          <Fragment>
+            <Grid item md={6}>
+              <Controller
+                name={`list.${i}.name`}
+                control={control}
+                defaultValue={""}
+                render={({ field, fieldState: { error } }) => (
+                  <TextField
+                    fullWidth
+                    label="name"
+                    {...field}
+                    error={!!error}
+                    helperText={error?.message}
+                  />
+                )}
+              />
+            </Grid>
+            <Grid item md={1}>
+              <Button onClick={() => remove(i)}>remove</Button>
+            </Grid>
+          </Fragment>
         ))}
       </Grid>
       <Grid item md={12}>
@@ -189,6 +194,7 @@ export const Form = () => {
           onClick={() => {
             reset();
             setValue("list", []);
+	    trigger();
             //     fields.map((_, i) => remove(i));
           }}
         >
